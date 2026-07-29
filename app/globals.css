@@ -22,6 +22,8 @@
   --error-subtle: rgba(239, 68, 68, 0.1);
   --error-border: rgba(239, 68, 68, 0.3);
   --warning: #f59e0b;
+  --warning-subtle: rgba(245, 158, 11, 0.08);
+  --warning-border: rgba(245, 158, 11, 0.35);
 }
 
 :root[data-theme="light"] {
@@ -46,6 +48,8 @@
   --error-subtle: rgba(220, 38, 38, 0.08);
   --error-border: rgba(220, 38, 38, 0.25);
   --warning: #d97706;
+  --warning-subtle: rgba(217, 119, 6, 0.08);
+  --warning-border: rgba(217, 119, 6, 0.35);
 }
 
 * {

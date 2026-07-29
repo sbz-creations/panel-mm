@@ -89,6 +89,7 @@ export default function Home() {
             title="MAM"
             description="Gestión centralizada de archivos y assets multimedia."
             soon
+            highlight
           />
         </div>
       </div>
@@ -103,21 +104,31 @@ interface ToolCardProps {
   description: string;
   accent?: boolean;
   soon?: boolean;
+  highlight?: boolean;
 }
 
-function ToolCard({ href, label, title, description, accent, soon }: ToolCardProps) {
+function ToolCard({ href, label, title, description, accent, soon, highlight }: ToolCardProps) {
+  const borderColor = highlight
+    ? "var(--warning-border)"
+    : soon
+      ? "var(--border-subtle)"
+      : "var(--border)";
+  const background = highlight ? "var(--warning-subtle)" : "var(--bg-card)";
+  const boxShadow = highlight ? "0 0 0 1px var(--warning-border)" : undefined;
+
   const inner = (
     <div
       style={{
         padding: 20,
         borderRadius: 12,
-        border: `1px solid ${soon ? "var(--border-subtle)" : "var(--border)"}`,
-        background: "var(--bg-card)",
+        border: `1px solid ${borderColor}`,
+        background,
+        boxShadow,
         display: "flex",
         flexDirection: "column",
         gap: 8,
         height: "100%",
-        opacity: soon ? 0.6 : 1,
+        opacity: soon && !highlight ? 0.6 : 1,
         transition: "border-color 0.15s, transform 0.15s, background 0.15s",
         cursor: soon ? "not-allowed" : "pointer",
       }}
@@ -144,11 +155,15 @@ function ToolCard({ href, label, title, description, accent, soon }: ToolCardPro
               textTransform: "uppercase",
               padding: "2px 6px",
               borderRadius: 4,
-              background: "var(--bg-hover)",
-              color: "var(--text-tertiary)",
-              border: "1px solid var(--border-subtle)",
+              background: highlight ? "var(--warning-subtle)" : "var(--bg-hover)",
+              color: highlight ? "var(--warning)" : "var(--text-tertiary)",
+              border: `1px solid ${highlight ? "var(--warning-border)" : "var(--border-subtle)"}`,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
             }}
           >
+            {highlight ? <span aria-hidden>🔥</span> : null}
             Soon
           </span>
         ) : null}
