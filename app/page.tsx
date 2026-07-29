@@ -79,10 +79,10 @@ export default function Home() {
             accent
           />
           <ToolCard
+            href="/thumb"
             label="Thumb Manager"
             title="Vimeo Thumbnails"
             description="Gestión de miniaturas para Vimeo."
-            soon
           />
         </div>
       </div>
