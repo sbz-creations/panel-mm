@@ -84,6 +84,12 @@ export default function Home() {
             title="Vimeo Thumbnails"
             description="Gestión de miniaturas para Vimeo."
           />
+          <ToolCard
+            label="Media Manager"
+            title="MAM"
+            description="Gestión centralizada de archivos y assets multimedia."
+            soon
+          />
         </div>
       </div>
     </div>
