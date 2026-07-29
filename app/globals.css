@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+:root[data-theme="dark"] {
+  --bg: #252525;
+  --bg-subtle: #2d2d2d;
+  --bg-card: #353535;
+  --bg-hover: #3d3d3d;
+  --border: #484848;
+  --border-subtle: #3d3d3d;
+  --text-primary: #d8d8d8;
+  --text-secondary: #969696;
+  --text-tertiary: #666666;
+  --accent: #3b82f6;
+  --accent-subtle: rgba(59, 130, 246, 0.08);
+  --accent-border: rgba(59, 130, 246, 0.25);
+  --accent-hover: #2563eb;
+  --success: #22c55e;
+  --success-subtle: rgba(34, 197, 94, 0.08);
+  --cyan: #06b6d4;
+  --cyan-subtle: rgba(6, 182, 212, 0.08);
+  --error: #ef4444;
+  --error-subtle: rgba(239, 68, 68, 0.1);
+  --error-border: rgba(239, 68, 68, 0.3);
+  --warning: #f59e0b;
+}
+
+:root[data-theme="light"] {
+  --bg: #e2e2e2;
+  --bg-subtle: #e8e8e8;
+  --bg-card: #efefef;
+  --bg-hover: #f4f4f4;
+  --border: #cacaca;
+  --border-subtle: #d8d8d8;
+  --text-primary: #1a1a1a;
+  --text-secondary: #555555;
+  --text-tertiary: #888888;
+  --accent: #2563eb;
+  --accent-subtle: rgba(37, 99, 235, 0.06);
+  --accent-border: rgba(37, 99, 235, 0.2);
+  --accent-hover: #1d4ed8;
+  --success: #16a34a;
+  --success-subtle: rgba(22, 163, 74, 0.08);
+  --cyan: #0891b2;
+  --cyan-subtle: rgba(8, 145, 178, 0.08);
+  --error: #dc2626;
+  --error-subtle: rgba(220, 38, 38, 0.08);
+  --error-border: rgba(220, 38, 38, 0.25);
+  --warning: #d97706;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  transition: background 0.2s, color 0.2s;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.panel-mm-tool-card:hover {
+  border-color: var(--accent-border) !important;
+  background: var(--bg-hover) !important;
+  transform: translateY(-1px);
+}
