@@ -119,9 +119,12 @@ export default async function RootLayout({
               </SidebarLink>
 
               <div style={{ height: 14 }} />
-              <SectionLabel>Thumb Manager</SectionLabel>
+              <SectionLabel>Vimeo Tools</SectionLabel>
               <SidebarLink href="/thumb" icon={<ImageIcon />}>
-                Vimeo Thumbs
+                Thumbnails
+              </SidebarLink>
+              <SidebarLink href="/versions" icon={<VersionsIcon />}>
+                Versions
               </SidebarLink>
             </nav>
 
@@ -261,6 +264,20 @@ function ImageIcon() {
         d="M2 12l4-4 3 3 2-2 3 3"
         stroke="currentColor"
         strokeWidth="1.3"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function VersionsIcon() {
+  return (
+    <svg viewBox="0 0 16 16" fill="none" width="14" height="14">
+      <path
+        d="M8 1.5v13M4 5l4-3.5L12 5M4 11l4 3.5 4-3.5"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>

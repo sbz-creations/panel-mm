@@ -80,9 +80,15 @@ export default function Home() {
           />
           <ToolCard
             href="/thumb"
-            label="Thumb Manager"
-            title="Vimeo Thumbnails"
-            description="Gestión de miniaturas para Vimeo."
+            label="Vimeo Tools"
+            title="Thumbnails"
+            description="Gestión de miniaturas y subtítulos para Vimeo."
+          />
+          <ToolCard
+            href="/versions"
+            label="Vimeo Tools"
+            title="Bulk Versions"
+            description="Reemplazá el archivo fuente de varios videos a la vez, sin cambiar el link."
           />
           <ToolCard
             label="Media Manager"

@@ -383,3 +383,93 @@ export async function deleteTrack(trackUri: string): Promise<boolean> {
   const res = await vimeoFetch(trackUri, { method: "DELETE" });
   return res.status === 200 || res.status === 204;
 }
+
+// ── Versions ───────────────────────────────────────────────────────────────
+
+export interface VimeoVersion {
+  id: string;
+  uri: string;
+  filename: string;
+  filesize: number;
+  upload_date: string;
+  duration: number;
+  active: boolean;
+}
+
+interface RawVersion {
+  uri?: string;
+  filename?: string;
+  filesize?: number;
+  upload_date?: string;
+  duration?: number;
+  active?: boolean;
+}
+
+export async function listVersions(videoId: string): Promise<VimeoVersion[]> {
+  const res = await vimeoFetch(`/videos/${videoId}/versions?per_page=100`);
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new VimeoError(`list_versions ${res.status}: ${text.slice(0, 300)}`, res.status);
+  }
+  const body = (await res.json()) as { data?: RawVersion[] };
+  return (body.data ?? []).map((v) => ({
+    id: (v.uri ?? "").split("/").pop() ?? "",
+    uri: v.uri ?? "",
+    filename: v.filename ?? "",
+    filesize: v.filesize ?? 0,
+    upload_date: v.upload_date ?? "",
+    duration: v.duration ?? 0,
+    active: v.active ?? false,
+  }));
+}
+
+export interface VersionUploadTicket {
+  version_uri: string;
+  upload_link: string;
+  size: number;
+}
+
+interface RawVersionCreate {
+  uri?: string;
+  upload?: { upload_link?: string; size?: number };
+}
+
+/**
+ * Initiate a new video version upload via tus.
+ * Returns the upload_link that the client uses for the chunked upload.
+ * The size MUST match the actual file bytes uploaded.
+ */
+export async function createVersion(
+  videoId: string,
+  fileName: string,
+  fileSize: number,
+): Promise<VersionUploadTicket> {
+  if (!Number.isFinite(fileSize) || fileSize <= 0) {
+    throw new VimeoError("Invalid file size for version upload.", 400);
+  }
+  const payload = {
+    file_name: fileName,
+    upload: { approach: "tus", size: fileSize },
+  };
+  const res = await vimeoFetch(`/videos/${videoId}/versions`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+  if (res.status !== 200 && res.status !== 201) {
+    const text = await res.text().catch(() => "");
+    throw new VimeoError(
+      `create_version ${res.status}: ${text.slice(0, 300)}`,
+      res.status,
+    );
+  }
+  const body = (await res.json()) as RawVersionCreate;
+  const uploadLink = body.upload?.upload_link;
+  if (!uploadLink) {
+    throw new VimeoError("Vimeo did not return an upload_link.", 502);
+  }
+  return {
+    version_uri: body.uri ?? "",
+    upload_link: uploadLink,
+    size: body.upload?.size ?? fileSize,
+  };
+}
