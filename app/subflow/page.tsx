@@ -277,14 +277,17 @@ export default function Home() {
           .filter(l => l !== "ES")
           .filter(l => !detectedLang || l.toUpperCase() !== detectedLang.toUpperCase());
         const translationResults = await translateSrt(srt, effectiveLangs, entry.title, titleDuration);
+
+        if (selectedLangs.includes("ES")) {
+          translationResults.es = entry.title
+            ? prependTitleBlock(srt, entry.title, titleDuration)
+            : srt;
+        }
+
         setResults(prev => ({ ...prev, [entry.name]: translationResults }));
 
         if (outputFolder) {
           const baseName = entry.name.replace(/\.[^.]+$/, "");
-          if (selectedLangs.includes("ES")) {
-            const esContent = entry.title ? prependTitleBlock(srt, entry.title, titleDuration) : srt;
-            try { await saveFile(`${baseName}_es.srt`, esContent); } catch { /* silent */ }
-          }
           for (const [lang, content] of Object.entries(translationResults)) {
             try {
               await saveFile(`${baseName}_${lang}.srt`, content);
