@@ -260,16 +260,6 @@ export async function transcribeFromUrl(
   return srt;
 }
 
-async function translateTitle(title: string, targetLang: string): Promise<string> {
-  const url =
-    `https://translate.googleapis.com/translate_a/single` +
-    `?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(title)}`;
-  const res = await fetch(url);
-  if (!res.ok) return title;
-  const data = await res.json();
-  return (data[0] as [string][]).map((part) => part[0]).join("") || title;
-}
-
 export function prependTitleBlock(srt: string, translatedTitle: string, durationSecs: number = 4): string {
   const ms = durationSecs * 1000;
   const h = Math.floor(ms / 3600000);
@@ -297,6 +287,7 @@ export async function translateSrt(
       model: "google",
       api_key: "",
       context: "",
+      title: title ?? "",
     }),
   });
 
@@ -307,6 +298,7 @@ export async function translateSrt(
 
   const data = await response.json();
   const translations = data.translations as Record<string, string>;
+  const titles = (data.titles ?? {}) as Record<string, string>;
 
   if (!title) return translations;
 
@@ -318,7 +310,7 @@ export async function translateSrt(
       result[key] = typeof translated === "string" ? translated : "";
       continue;
     }
-    const translatedTitle = await translateTitle(title, key);
+    const translatedTitle = titles[key] || title;
     result[key] = prependTitleBlock(translated, translatedTitle, titleDuration);
   }
   return result;

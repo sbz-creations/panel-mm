@@ -3,6 +3,7 @@ import {
   LANGUAGES,
   buildSrt,
   googleTranslate,
+  googleTranslateTitle,
   parseSrt,
   type LanguageCode,
 } from "@/lib/translate-google";
@@ -16,6 +17,7 @@ interface TranslateBody {
   model?: string;
   api_key?: string;
   context?: string;
+  title?: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -47,6 +49,8 @@ export async function POST(req: NextRequest) {
   const blocks = parseSrt(srt);
   const texts = blocks.map((b) => b.text);
   const translations: Record<string, string> = {};
+  const titles: Record<string, string> = {};
+  const title = typeof body.title === "string" ? body.title.trim() : "";
 
   for (const lang of targets as LanguageCode[]) {
     try {
@@ -63,7 +67,11 @@ export async function POST(req: NextRequest) {
         { status: 500 },
       );
     }
+
+    if (title) {
+      titles[lang] = await googleTranslateTitle(title, lang);
+    }
   }
 
-  return Response.json({ translations });
+  return Response.json({ translations, titles });
 }

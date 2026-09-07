@@ -113,3 +113,24 @@ export async function googleTranslate(
     translatedLines.slice(start, start + count).join("\n"),
   );
 }
+
+export async function googleTranslateTitle(
+  title: string,
+  targetLang: LanguageCode,
+): Promise<string> {
+  const url =
+    "https://translate.googleapis.com/translate_a/single" +
+    `?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(title)}`;
+  try {
+    const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+    if (!res.ok) return title;
+    const data = (await res.json()) as unknown;
+    if (!Array.isArray(data) || !Array.isArray(data[0])) return title;
+    const translated = (data[0] as unknown[])
+      .map((part) => (Array.isArray(part) && typeof part[0] === "string" ? part[0] : ""))
+      .join("");
+    return translated.trim() || title;
+  } catch {
+    return title;
+  }
+}
