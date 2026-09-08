@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# panel-mm
 
-## Getting Started
+Internal operations panel that runs the day-to-day audiovisual production workflow of a coach-training platform: SRT subtitle localization across 5+ languages, Vimeo thumbnail and subtitle-track management, and bulk video-version replacement.
 
-First, run the development server:
+**Live:** https://panel-mm.vercel.app — access is Google OAuth + email allowlist. UI is in Spanish.
+
+## What it does
+
+- **Subflow** — SRT subtitle localization. Bulk translation across 5+ target languages with per-line editing, translation history, and ZIP export. Uses Claude as the primary translator, with Google Translate as fallback.
+- **Thumbnails** — browse Vimeo folders, preview and apply custom thumbnails through a safe dry-run → apply → discard flow, and manage the subtitle tracks embedded in each video.
+- **Bulk Versions** — replace the source file of multiple Vimeo videos at once without changing the public link, using resumable TUS uploads.
+- **Transcribe** — hand off a local path or URL to a Python + faster-whisper backend and pull back the resulting SRT.
+- **Auth & i18n** — Auth.js v5 with Google OAuth and a hard email allowlist; UI fully bilingual (ES/EN).
+
+## Why it exists
+
+Built to run the day-to-day operations of **Maradona Menotti**, a coach-training platform endorsed by AFA and CONMEBOL, whose library has grown to **1,200+ videos distributed in 5 languages**. Manual localization at that scale is a full-time job — this panel replaces it with a single operator flow.
+
+## Stack
+
+- Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4
+- Auth.js v5 (Google OAuth + email allowlist)
+- Vimeo API (folders, videos, tracks, thumbnails)
+- `tus-js-client` for resumable uploads
+- Anthropic Claude + Google Translate for subtitle localization
+- Delegates transcription to a separate Python service (FastAPI + `faster-whisper`)
+
+## Screenshots
+
+<!-- TODO: subir capturas -->
+![Home](docs/screenshot-1.png)
+![Subflow — subtitle translation flow](docs/screenshot-2.png)
+![Thumbnails — dry-run preview](docs/screenshot-3.png)
+
+## Running locally
 
 ```bash
+cp env.example .env.local   # fill in the values
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See [`env.example`](env.example) for the required environment variables (Auth.js, Google OAuth, Vimeo token, Anthropic key).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Internal tool. Not an official product of Vimeo, Anthropic, Google, AFA, CONMEBOL, or the Maradona Menotti platform itself — this repository is my own operator tooling, built to make day-to-day work on the platform's video library scale. The endorsement mentioned above refers to the parent platform; it does not extend to this panel or to me personally.
 
-## Learn More
+## License
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT — see [LICENSE](LICENSE).
