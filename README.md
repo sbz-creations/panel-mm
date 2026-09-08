@@ -27,10 +27,13 @@ Built to run the day-to-day operations of **Maradona Menotti**, a coach-training
 
 ## Screenshots
 
-<!-- TODO: subir capturas -->
-![Home](docs/screenshot-1.png)
-![Subflow — subtitle translation flow](docs/screenshot-2.png)
-![Thumbnails — dry-run preview](docs/screenshot-3.png)
+> Sensitive regions (client identifiers, operator email, video titles, folder
+> names) are blurred. The blurred elements exist in the real UI.
+
+![Home](docs/01-home.png)
+![Subflow — subtitle translation flow](docs/02-subflow.png)
+![Thumbnails — dry-run preview](docs/03-thumbnails.png)
+![Bulk Versions — source-file replacement flow](docs/04-bulk-versions.png)
 
 ## Running locally
 
